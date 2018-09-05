@@ -46,8 +46,10 @@ $ npm i
 $ npm run start:stage-1
 ```
 
-In this stage we will add logging functions to log every event occurs under hook and show the event target and event type
-So we will create `historyModule.js`
+In this stage we will add logging component to log every event occurs under hook and show the event target and event type.
+We need to append this component into `App` and we make some manipulation on it, but we won't to change or touch `App state`.
+
+How will we make this ? we need to create a module that let us to store, get and clear it.
 ```js
 function historyModule () {
   // array of events that occurred
@@ -178,3 +180,50 @@ const HistoryLogger = (props) => {
 export default HistoryLogger;
 
 ```
+
+## Stage-2 => `render()`:
+```bash
+$ npm i
+$ npm run start:stage-2
+```
+`render()`
+> The render() function should be pure, meaning that it does not modify component state, it returns the same result each time it’s invoked, and it does not directly interact with the browser...
+
+> A re-render can only be triggered if a component’s state has changed. The state can change from a props change, or from a direct **setState** change.
+
+When the component re-rendering?
+ * Component changed => re-render.
+ * Parent changed => re-render.
+ * Section of props that doesn't actually impact the view changed => re-render.
+
+#### Caution!
+ > Don't put any functions that affect the state inside `render()` method, this will cause infinite loop.
+
+ Now we will add our module inside the `render()` method for `App`, `Parent` and `Child`.
+ ```js
+ // In App
+ ...
+ render(){
+   historyModule.add({ method:'render', target:'App' })
+ ...
+ // In Parent
+ ...
+ render(){
+   historyModule.add({ method:'render', target:'Parent' })
+ ...
+ // In Child
+ ...
+ render(){
+   historyModule.add({ method:'render', target:'Child' })
+ ...
+
+
+ ```
+ The result will be showed in the `History` component.
+
+###### Watch out some points:
+ * At first the we will see that `App` and `Parent` components will rendered.
+ * Showing child component will re-render `Parent` and `Child` components, this because we change the `Parent` state.
+ * Hiding `Child` component will re-render `Parent` component only, because we didn't change `App` state.
+ * Increasing `Parent` counter will re-render `Parent` and `Child`, note that the `Child` counter will not change even though the `Child` component re-rendered.
+ * Increasing `Child` counter component will re-render `Child` only, because we didn't change any of `Parent` or `App` states.
