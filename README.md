@@ -35,6 +35,11 @@ stage-0
    ├── package-lock.json
    └── package.json
 ```
+Watch out some points:
+  *  when you increase the `Parent` counter (Change it's state) it will not affect the `Child counter`.
+  * when you increase the `Child` counter (Change it's state) it will not affect the `Parent counter`.
+  * when you hide the `Child` component and Show it again the `Child counter` will rested.
+
 ## Stage-1 => `Logger`:
 ```bash
 $ npm i
