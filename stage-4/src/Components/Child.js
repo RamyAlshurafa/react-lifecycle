@@ -23,6 +23,16 @@ class Child extends Component {
     // this.increaseChildCounter()
   }
 
+  componentWillUnmount() {
+   historyModule.add({ method:'componentWillUnmount', target:`Child` })
+   /**
+   * Uncomment the line below to update the state
+   * It will NOT re-render the component after `componentWillUnmount`
+   * And `componentWillUnmount()` itself will not called again
+   */
+   // this.increaseChildCounter()
+  }
+
   render() {
     historyModule.add({ method:'render', target:'Child' })
 

@@ -236,7 +236,7 @@ $ npm run start:stage-3
 
 > This method is a good place to set up any subscriptions. If you do that, don’t forget to unsubscribe in componentWillUnmount().
 
-Now we will add our module inside the `class` for `App`, `Parent` and `Child`.
+Now we will add our module inside the `componentDidMount` for `App`, `Parent` and `Child`.
 
 ```js
 componentDidMount() {
@@ -259,5 +259,35 @@ Watch out some points:
 To see this case you need to add this line inside `componentDidMount` method in `Child` component, you  will observe that `render` method called again after `componentDidMount`
 ```js
   this.increaseChildCounter()
-
 ```
+
+## Stage-4 => `componentWillUnmount`:
+```bash
+$ npm i
+$ npm run start:stage-4
+```
+> `componentWillUnmount()` is invoked immediately before a component is unmounted and destroyed.
+
+Now we will add our module inside the `componentWillUnmount()` for `App`, `Parent` and `Child`.
+
+```js
+componentWillUnmount() {
+ historyModule.add({ method:'componentWillUnmount', target:`App or Parent or Child` })
+}
+```
+
+Watch out some points:
+* `componentWillUnmount` always occur at the end of component lifecycle.
+
+##### Caution:
+> You should not call setState() in componentWillUnmount() because the component will never be re-rendered. Once a component instance is unmounted, it will never be mounted again.
+
+To see this case add this line inside `componentWillUnmount` in `Child` component (nothing will change)
+```js
+this.increaseChildCounter()
+```
+##### `componentWillUnmount` uses:
+* Canceling network requests.
+* `clearInterval()`.
+* `removeEventListener()`.
+* Generally: cleaning up any subscriptions that were created in `componentDidMount()`.
