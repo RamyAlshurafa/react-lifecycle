@@ -11,13 +11,17 @@ class App extends Component {
   state = {
     history: []
   }
-  
+
+  componentDidMount() {
+    historyModule.add({ method:'componentDidMount', target:'App' })
+  }
+
   render() {
     historyModule.add({ method:'render', target:'App' })
 
     return (
       <div className="App">
-      <h3>Stage-2</h3>
+      <h3>Stage-3</h3>
       <Parent />
       <History />
       </div>

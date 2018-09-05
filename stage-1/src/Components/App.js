@@ -9,14 +9,9 @@ class App extends Component {
   state = {
     history: []
   }
-  handle = (newItem) => {
-    this.setState({
-      history: newItem
-    })
-  }
 
   render() {
-    
+
     return (
       <div className="App">
       <h3>Stage-1</h3>

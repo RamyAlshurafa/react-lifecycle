@@ -186,7 +186,7 @@ export default HistoryLogger;
 $ npm i
 $ npm run start:stage-2
 ```
-`render()`
+#### `render()`
 > The render() function should be pure, meaning that it does not modify component state, it returns the same result each time it’s invoked, and it does not directly interact with the browser...
 
 > A re-render can only be triggered if a component’s state has changed. The state can change from a props change, or from a direct **setState** change.
@@ -200,30 +200,64 @@ When the component re-rendering?
  > Don't put any functions that affect the state inside `render()` method, this will cause infinite loop.
 
  Now we will add our module inside the `render()` method for `App`, `Parent` and `Child`.
- ```js
- // In App
- ...
- render(){
-   historyModule.add({ method:'render', target:'App' })
- ...
- // In Parent
- ...
- render(){
-   historyModule.add({ method:'render', target:'Parent' })
- ...
- // In Child
- ...
- render(){
-   historyModule.add({ method:'render', target:'Child' })
- ...
 
+ ```bash
+ // In App
+
+ render(){
+   historyModule.add({ method:'render', target:'App' });
+
+ // In Parent
+
+ render(){
+   historyModule.add({ method:'render', target:'Parent' });
+
+ // In Child
+ render(){
+   historyModule.add({ method:'render', target:'Child' });
 
  ```
- The result will be showed in the `History` component.
+
+The result will be showed in the `History` component.
 
 ###### Watch out some points:
- * At first the we will see that `App` and `Parent` components will rendered.
- * Showing child component will re-render `Parent` and `Child` components, this because we change the `Parent` state.
- * Hiding `Child` component will re-render `Parent` component only, because we didn't change `App` state.
- * Increasing `Parent` counter will re-render `Parent` and `Child`, note that the `Child` counter will not change even though the `Child` component re-rendered.
- * Increasing `Child` counter component will re-render `Child` only, because we didn't change any of `Parent` or `App` states.
+* At first the we will see that `App` and `Parent` components will rendered.
+* Showing child component will re-render `Parent` and `Child` components, this because we change the `Parent` state.
+* Hiding `Child` component will re-render `Parent` component only, because we didn't change `App` state.
+* Increasing `Parent` counter will re-render `Parent` and `Child`, note that the `Child` counter will not change even though the `Child` component re-rendered.
+* Increasing `Child` counter component will re-render `Child` only, because we didn't change any of `Parent` or `App` states.
+## Stage-3 => `componentDidMount()`:
+```bash
+$ npm i
+$ npm run start:stage-3
+```
+
+> componentDidMount() is invoked immediately after a component is mounted (inserted into the tree). Initialization that requires DOM nodes should go here. If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
+
+> This method is a good place to set up any subscriptions. If you do that, don’t forget to unsubscribe in componentWillUnmount().
+
+Now we will add our module inside the `class` for `App`, `Parent` and `Child`.
+
+```js
+componentDidMount() {
+ historyModule.add({ method:'componentDidMount', target:App or Parent or Child })
+}
+```
+Watch out some points:
+* `componentDidMount` occured after `render` the components.
+* When we show the `Child` component it will render the `Child` then `componentDidMount` will be call.
+* If the component is visible and the state changed `componentDidMount` will not occurs.  
+
+##### `componentDidMount` uses:
+* Update component state.
+* For fetching data.
+* For `addEventListiner` if we need to add it manually.
+
+##### Note:
+>You may call setState() immediately in componentDidMount(). It will trigger an extra rendering, but it will happen before the browser updates the screen.
+
+To see this case you need to add this line inside `componentDidMount` method in `Child` component, you  will observe that `render` method called again after `componentDidMount`
+```js
+  this.increaseChildCounter()
+
+```
