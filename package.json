@@ -13,6 +13,7 @@
     "start:stage-2": "cd stage-2 && react-scripts start",
     "start:stage-3": "cd stage-3 && react-scripts start",
     "start:stage-4": "cd stage-4 && react-scripts start",
+    "start:stage-5": "cd stage-5 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"

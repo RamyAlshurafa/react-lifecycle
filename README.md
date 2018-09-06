@@ -240,13 +240,20 @@ Now we will add our module inside the `componentDidMount` for `App`, `Parent` an
 
 ```js
 componentDidMount() {
- historyModule.add({ method:'componentDidMount', target:App or Parent or Child })
+  historyModule.add({ method:'componentDidMount', target:'Child' })
+  /**
+   * Uncomment the line below to update the state
+   * It will re-render the component after `componentDidMount`
+   * but `componentDidMount` itself will not called again
+   */
+  // this.increaseChildCounter()
 }
 ```
 Watch out some points:
 * `componentDidMount` occured after `render` the components.
 * When we show the `Child` component it will render the `Child` then `componentDidMount` will be call.
-* If the component is visible and the state changed `componentDidMount` will not occurs.  
+* If the component is visible and the state changed `componentDidMount` will not occurs.
+*  `componentDidMount` called for `Parent` before `componentDidMount` for `App` that mean `componentDidMount` called after all Children of the component and their children are `componentDidMount`.
 
 ##### `componentDidMount` uses:
 * Update component state.
@@ -269,10 +276,15 @@ $ npm run start:stage-4
 > `componentWillUnmount()` is invoked immediately before a component is unmounted and destroyed.
 
 Now we will add our module inside the `componentWillUnmount()` for `App`, `Parent` and `Child`.
-
 ```js
 componentWillUnmount() {
- historyModule.add({ method:'componentWillUnmount', target:`App or Parent or Child` })
+ historyModule.add({ method:'componentWillUnmount', target:`Child` })
+ /**
+ * Uncomment the line below to update the state
+ * It will NOT re-render the component after `componentWillUnmount`
+ * And `componentWillUnmount()` itself will not called again
+ */
+ // this.increaseChildCounter()
 }
 ```
 
@@ -291,3 +303,33 @@ this.increaseChildCounter()
 * `clearInterval()`.
 * `removeEventListener()`.
 * Generally: cleaning up any subscriptions that were created in `componentDidMount()`.
+
+## Stage-5 => `shouldComponentUpdate`:
+```bash
+$ npm i
+$ npm run start:stage-5
+```
+> shouldComponentUpdate() is invoked before rendering when new props or state are being received. Defaults to true. This method is not called for the initial render or when forceUpdate() is used.
+
+Now we will add our module inside the `shouldComponentUpdate()` for `Parent` and `Child`.
+
+```js
+shouldComponentUpdate(nextProps, nextState) {
+  /**
+   * Check if the new state is one of 2 multiples
+   * then `shouldComponentUpdate` will return true
+   * this mean we want the component to re-render
+   * else we won't to re-render the component
+   */
+  if (this.state.childCounter % 2 === 0){
+    historyModule.add({ method:'shouldComponentUpdate :: True', target:'Child' })
+    return true;
+  }
+  historyModule.add({ method:'shouldComponentUpdate :: False', target:'Child' })
+  return false;
+}
+```
+Watch out some points:
+* When you Show the `Child` component `shouldComponentUpdate` will be called for `Parent` component because we changed it's state, but `shouldComponentUpdate` will not be called for `Child` component .
+* At every increase in `Parent` counter `shouldComponentUpdate` will be called for both `Parent` and `Child`.
+* If the `shouldComponentUpdate` return `true` then `render` method will called after, else `render()` will not be called.
