@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import swal from 'sweetalert'
 
 import historyModule from './historyModule.js'
 
@@ -33,20 +34,40 @@ class Child extends Component {
    // this.increaseChildCounter()
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    /**
-     * Check if the new state is one of 2 multiples
-     * then `shouldComponentUpdate` will return true
-     * this mean we want the component to re-render
-     * else we won't to re-render the component
-     */
-    if (this.state.childCounter % 2 === 0){
-      historyModule.add({ method:'shouldComponentUpdate :: True', target:'Child' })
-      return true;
-    }
-    historyModule.add({ method:'shouldComponentUpdate :: False', target:'Child' })
-    return false;
+  //  shouldComponentUpdate(nextProps, nextState) {
+  //   /**
+  //    * Check if the new state is one of 2 multiples
+  //    * then `shouldComponentUpdate` will return true
+  //    * this mean we want the component to re-render
+  //    * else we won't to re-render the component
+  //    */
+  //   // if (this.state.childCounter % 2 === 0){
+  //   //   historyModule.add({ method:'shouldComponentUpdate :: True', target:'Child' })
+  //   //   return true;
+  //   // }
+  //   // historyModule.add({ method:'shouldComponentUpdate :: False', target:'Child' })
+  //   // return false;
+  //       let value = true
+  //        swal("Update the component?", {
+  //         buttons: ["No", "Yes"],
+  //       }).then(res=>{
+  //        value = !!res
+  //       })
+  //        return value
+  //
+  // }
+  
+  async shouldComponentUpdate(nextProps, nextState) {
+        let value =''
+         await swal("Update the component?", {
+          buttons: ["No", "Yes"],
+        }).then(res=>{
+         value = !!res
+        })
+        console.log(value,'valueeeeeeeee');
+         return value
   }
+
 
   render() {
     historyModule.add({ method:'render', target:'Child' })
