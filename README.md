@@ -5,14 +5,14 @@
   $ git clone git@github.com:RamyAlshurafa/react-lifecycle.git
   $ cd react-lifecycle
 ```
- This workshop will divided into stages:
+ This workshop will be divided into stages:
 ## Stage-0 => Base stage:
 ```bash
 $ npm i
 $ npm run start:stage-0
 ```
 
-This stage contains the core file structure required for next stages.
+This stage contains the core file structure required for the subsequent stages.
 
 
 ```bash
@@ -35,7 +35,7 @@ stage-0
    ├── package-lock.json
    └── package.json
 ```
-Watch out some points:
+Keep note of the following points:
   *  when you increase the `Parent` counter (Change it's state) it will not affect the `Child counter`.
   * when you increase the `Child` counter (Change it's state) it will not affect the `Parent counter`.
   * when you hide the `Child` component and Show it again the `Child counter` will rested.
@@ -46,10 +46,10 @@ $ npm i
 $ npm run start:stage-1
 ```
 
-In this stage we will add logging component to log every event occurs under hook and show the event target and event type.
-We need to append this component into `App` and we make some manipulation on it, but we won't to change or touch `App state`.
+In this stage we will add logging component to log every event that occurs under hook, and show the event target and event type.
+We need to append this component into `App` and then manipulate it, but we won't change`App state`.
 
-How will we make this ? we need to create a module that let us to store, get and clear it.
+How are we going to do this? we need to create a module that lets us store, get and clear the state.
 ```js
 function historyModule () {
   // array of events that occurred
@@ -191,7 +191,7 @@ $ npm run start:stage-2
 
 > A re-render can only be triggered if a component’s state has changed. The state can change from a props change, or from a direct **setState** change.
 
-When the component re-rendering?
+When does the component re-render?
  * Component changed => re-render.
  * Parent changed => re-render.
  * Section of props that doesn't actually impact the view changed => re-render.
@@ -220,11 +220,11 @@ When the component re-rendering?
 
 The result will be showed in the `History` component.
 
-###### Watch out some points:
-* At first the we will see that `App` and `Parent` components will rendered.
-* Showing child component will re-render `Parent` and `Child` components, this because we change the `Parent` state.
-* Hiding `Child` component will re-render `Parent` component only, because we didn't change `App` state.
-* Increasing `Parent` counter will re-render `Parent` and `Child`, note that the `Child` counter will not change even though the `Child` component re-rendered.
+###### Keep note of the following points:
+* At first the we will see that `App` and `Parent` components will re-render.
+* Showing child component will re-render `Parent` and `Child` components, this is because we change the `Parent` state.
+* Hiding `Child` component will re-render `Parent` component only, because we didn't change the `App` state.
+* Increasing `Parent` counter will re-render `Parent` and `Child`. Note that the `Child` counter will not change even though the `Child` component re-rendered.
 * Increasing `Child` counter component will re-render `Child` only, because we didn't change any of `Parent` or `App` states.
 ## Stage-3 => `componentDidMount()`:
 ```bash
@@ -249,11 +249,11 @@ componentDidMount() {
   // this.increaseChildCounter()
 }
 ```
-Watch out some points:
-* `componentDidMount` occured after `render` the components.
-* When we show the `Child` component it will render the `Child` then `componentDidMount` will be call.
-* If the component is visible and the state changed `componentDidMount` will not occurs.
-*  `componentDidMount` called for `Parent` before `componentDidMount` for `App` that mean `componentDidMount` called after all Children of the component and their children are `componentDidMount`.
+Keep note of some points:
+* `componentDidMount` occurs the component is rendered.
+* When we show the `Child` component, it will render the `Child` then `componentDidMount` will be called.
+* If the component is visible and the state changed `componentDidMount` will not occur.
+* `componentDidMount` is called for `Parent` before `componentDidMount` for `App`. That means `componentDidMount` is called after all Children of the component and their children are `componentDidMount`.
 
 ##### `componentDidMount` uses:
 * Update component state.
@@ -288,8 +288,8 @@ componentWillUnmount() {
 }
 ```
 
-Watch out some points:
-* `componentWillUnmount` always occur at the end of component lifecycle.
+Keep note of some points:
+* `componentWillUnmount` always occurs at the end of component lifecycle.
 
 ##### Caution:
 > You should not call setState() in componentWillUnmount() because the component will never be re-rendered. Once a component instance is unmounted, it will never be mounted again.
@@ -318,8 +318,8 @@ shouldComponentUpdate(nextProps, nextState) {
   /**
    * Check if the new state is one of 2 multiples
    * then `shouldComponentUpdate` will return true
-   * this mean we want the component to re-render
-   * else we won't to re-render the component
+   * this means we want the component to re-render
+   * else we won't re-render the component
    */
   if (this.state.childCounter % 2 === 0){
     historyModule.add({ method:'shouldComponentUpdate :: True', target:'Child' })
@@ -329,7 +329,7 @@ shouldComponentUpdate(nextProps, nextState) {
   return false;
 }
 ```
-Watch out some points:
-* When you Show the `Child` component `shouldComponentUpdate` will be called for `Parent` component because we changed it's state, but `shouldComponentUpdate` will not be called for `Child` component .
+Keep note of some points:
+* When you Show the `Child` component `shouldComponentUpdate` will be called for `Parent` component because we changed its state, but `shouldComponentUpdate` will not be called for `Child` component.
 * At every increase in `Parent` counter `shouldComponentUpdate` will be called for both `Parent` and `Child`.
-* If the `shouldComponentUpdate` return `true` then `render` method will called after, else `render()` will not be called.
+* If the `shouldComponentUpdate` return `true` then `render` method will be called after, else `render()` will not be called.
